@@ -19,9 +19,9 @@ namespace Kusto.Tests.ScenarioTests
         private const string ObjectIdKey = "ObjectId";
         private const string LocationKey = "location";
         private const string SubIdKey = "SubId";
-        public string eventHubResourceId = "/subscriptions/11d5f159-a21d-4a6c-8053-c3aae30057cf/resourceGroups/test-clients-rg/providers/Microsoft.EventHub/namespaces/testclientsns/eventhubs/testclientseh";
-        public string storageAccountForEventGridResourceId = "/subscriptions/11d5f159-a21d-4a6c-8053-c3aae30057cf/resourceGroups/test-clients-rg/providers/Microsoft.Storage/storageAccounts/testclients";
-        public string iotHubResourceId = "/subscriptions/11d5f159-a21d-4a6c-8053-c3aae30057cf/resourceGroups/test-clients-rg/providers/Microsoft.Devices/IotHubs/test-clients-iot";
+        public string eventHubResourceId = "/subscriptions/ed0cf569-9dc0-455c-9905-afdded5e1504/resourceGroups/test-clients-rg/providers/Microsoft.EventHub/namespaces/testclientsns/eventhubs/testclientseh";
+        public string storageAccountForEventGridResourceId = "/subscriptions/ed0cf569-9dc0-455c-9905-afdded5e1504/resourceGroups/test-clients-rg/providers/Microsoft.Storage/storageAccounts/testclients";
+        public string iotHubResourceId = "/subscriptions/ed0cf569-9dc0-455c-9905-afdded5e1504/resourceGroups/test-clients-rg/providers/Microsoft.Devices/IotHubs/test-clients-iot";
         public string scriptUrl = "https://dortest.blob.core.windows.net/dor/df.txt";
         public string scriptUrlSasToken = "topSecret"; // TODO: when running in recording mode - use acatual sas token.
         public string forceUpdateTag = "tag1";
@@ -56,6 +56,9 @@ namespace Kusto.Tests.ScenarioTests
         public string eventGridConnectinoName { get; internal set; }
         public string iotHubConnectionName { get; internal set; }
         public string scriptName { get; internal set; }
+        public string privateEndpointConnectionName { get; internal set; }
+        public string privateLinkResourceName { get; internal set; }
+        public string managedPrivateEndpointName { get; internal set; }
 
         public Dictionary<string, string> tags { get; internal set; }
         public AzureSku sku1 { get; set; }
@@ -78,6 +81,8 @@ namespace Kusto.Tests.ScenarioTests
         public List<DatabasePrincipal> databasePrincipals { get; set; }
         public DatabasePrincipal databasePrincipal { get; set; }
         public KeyVaultProperties keyVaultProperties { get; set; }
+        public PrivateEndpointConnection privateEndpointConnection { get; set; }
+        public ManagedPrivateEndpoint managedPrivateEndpoint { get; set; }
 
         public KustoTestBase(MockContext context)
         {
@@ -127,6 +132,9 @@ namespace Kusto.Tests.ScenarioTests
             eventGridConnectinoName = TestUtilities.GenerateName("eventGridConnection");
             iotHubConnectionName = TestUtilities.GenerateName("iothubConnection");
             scriptName = "dor";
+            //privateEndpointConnectionName = "sagivtest"; //TestUtilities.GenerateName("privateEndpointConnectionName");
+            //managedPrivateEndpointName = TestUtilities.GenerateName("managedPrivateEndpointName");
+            //privateLinkResourceName = TestUtilities.GenerateName("privateLinkResourceName");
 
 
             sku1 = new AzureSku(name: "Standard_D13_v2", "Standard", capacity: 2);
@@ -150,6 +158,10 @@ namespace Kusto.Tests.ScenarioTests
             eventGridDataConnection = new EventGridDataConnection(storageAccountForEventGridResourceId, eventHubResourceId, consumerGroupName, tableName: tableName, dataFormat: dataFormat, location: location);
             iotHubDataConnection = new IotHubDataConnection(iotHubResourceId, consumerGroupName, sharedAccessPolicyNameForIotHub, location: location);
             script = new Script(scriptUrl, scriptUrlSasToken, forceUpdateTag: forceUpdateTag, continueOnErrors: continueOnErrors);
+            privateEndpointConnection = new PrivateEndpointConnection(
+                privateLinkServiceConnectionState: new PrivateLinkServiceConnectionStateProperty()
+            );
+            managedPrivateEndpoint = new ManagedPrivateEndpoint();
 
             databasePrincipal = GetDatabasePrincipalList(dBprincipalMail, "Admin");
             databasePrincipals = new List<DatabasePrincipal> {databasePrincipal};
