@@ -785,7 +785,7 @@ namespace Kusto.Tests.ScenarioTests
                 Assert.Equal("Engine", privateLinkResource.RequiredMembers[0]);
                 Assert.Equal("DataManagement", privateLinkResource.RequiredMembers[1]);
                 Assert.Equal(4, privateLinkResource.RequiredZoneNames.Count);
-                Assert.Equal($"privatelink.{testBase.location}.dev.kusto.windows.net", privateLinkResource.RequiredZoneNames[0]);
+                Assert.Equal($"privatelink.westus2.dev.kusto.windows.net", privateLinkResource.RequiredZoneNames[0]);
                 Assert.Equal("privatelink.blob.core.windows.net", privateLinkResource.RequiredZoneNames[1]);
                 Assert.Equal("privatelink.queue.core.windows.net", privateLinkResource.RequiredZoneNames[2]);
                 Assert.Equal("privatelink.table.core.windows.net", privateLinkResource.RequiredZoneNames[3]);

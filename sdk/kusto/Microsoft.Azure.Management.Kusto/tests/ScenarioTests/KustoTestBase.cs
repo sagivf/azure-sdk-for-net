@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Azure.Management.Kusto;
 using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Azure.Management.ResourceManager.Models;
@@ -90,25 +91,25 @@ namespace Kusto.Tests.ScenarioTests
                 subscriptionId = testEnv.SubscriptionId;
                 HttpMockServer.Variables[TenantIdKey] = tenantId;
                 HttpMockServer.Variables[SubIdKey] = subscriptionId;
+                
+                var provider = resourcesClient.Providers.Get("Microsoft.Kusto");
+                location = provider.ResourceTypes.Where(
+                    (resType) =>
+                    {
+                        if (resType.ResourceType == "clusters")
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                ).First().Locations.FirstOrDefault();
             }
             else if (HttpMockServer.Mode == HttpRecorderMode.Playback)
             {
+                location = "";
                 tenantId = HttpMockServer.Variables[TenantIdKey];
                 subscriptionId = HttpMockServer.Variables[SubIdKey];
             }
-
-            location = "westus2";
-            // var provider = resourcesClient.Providers.Get("Microsoft.Kusto");
-            // this.location = provider.ResourceTypes.Where(
-            //     (resType) =>
-            //     {
-            //         if (resType.ResourceType == "clusters")
-            //         {
-            //             return true;
-            //         }
-            //         return false;
-            //     }
-            // ).First().Locations.FirstOrDefault();
 
             Initialize();
         }
