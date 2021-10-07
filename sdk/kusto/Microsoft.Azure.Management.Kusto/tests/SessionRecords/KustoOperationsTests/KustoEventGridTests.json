@@ -955,7 +955,8 @@
       "testattacheddatabaseconfiguration3327",
       "eventhubConnection6437",
       "eventGridConnection7798",
-      "iothubConnection2787"
+      "iothubConnection2787",
+      "privateendpointname5377"
     ]
   },
   "Variables": {
