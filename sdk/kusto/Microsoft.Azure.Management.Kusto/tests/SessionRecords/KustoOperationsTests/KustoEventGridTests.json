@@ -956,7 +956,8 @@
       "eventhubConnection6437",
       "eventGridConnection7798",
       "iothubConnection2787",
-      "privateendpointname5377"
+      "privateendpointname5377",
+      "managedprivateendpointname6714"
     ]
   },
   "Variables": {

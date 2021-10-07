@@ -118,7 +118,7 @@ namespace Kusto.Tests.ScenarioTests
             var leaderClusterResourceId = $"/subscriptions/{subscriptionId}/resourceGroups/{rgName}/providers/Microsoft.Kusto/Clusters/{clusterName}";
             
             //eventHubNamespaceResourceId = $"/subscriptions/{subscriptionId}/resourceGroups/test-clients-rg/providers/Microsoft.EventHub/namespaces/testclientsns";
-            eventHubNamespaceResourceId = $"/subscriptions/{subscriptionId}/resourceGroups/test-clients-rg/providers/Microsoft.EventHub/namespaces/testclientsns2";
+            eventHubNamespaceResourceId = $"/subscriptions/{subscriptionId}/resourceGroups/test-clients-rg/providers/Microsoft.EventHub/namespaces/testclientsns22";
             eventHubResourceId = $"/subscriptions/{subscriptionId}/resourceGroups/test-clients-rg/providers/Microsoft.EventHub/namespaces/testclientsns/eventhubs/testclientseh";
             storageAccountForEventGridResourceId = $"/subscriptions/{subscriptionId}/resourceGroups/test-clients-rg/providers/Microsoft.Storage/storageAccounts/testclients";
             iotHubResourceId = $"/subscriptions/{subscriptionId}/resourceGroups/test-clients-rg/providers/Microsoft.Devices/IotHubs/test-clients-iot";
@@ -135,7 +135,7 @@ namespace Kusto.Tests.ScenarioTests
             eventGridConnectinoName = TestUtilities.GenerateName("eventGridConnection");
             iotHubConnectionName = TestUtilities.GenerateName("iothubConnection");
             privateEndpointConnectionName = TestUtilities.GenerateName("privateendpointname");
-            //managedPrivateEndpointName = TestUtilities.GenerateName("managedprivateendpointname");
+            managedPrivateEndpointName = TestUtilities.GenerateName("managedprivateendpointname");
             scriptName = "dor";
 
 

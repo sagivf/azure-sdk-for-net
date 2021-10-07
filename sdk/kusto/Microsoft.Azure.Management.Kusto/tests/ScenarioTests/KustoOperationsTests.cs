@@ -728,35 +728,40 @@ namespace Kusto.Tests.ScenarioTests
             }
         }
 
-        // [Fact]
-        // public void KustoManagedPrivateEndpointsTests()
-        // {
-        //     using (MockContext context = MockContext.Start(GetType()))
-        //     {
-        //         var testBase = new KustoTestBase(context);
-        //
-        //         // create cluster
-        //         testBase.client.Clusters.CreateOrUpdate(testBase.rgName, testBase.clusterName, testBase.cluster);
-        //
-        //         // create private endpoint connection
-        //         var managedPrivateEndpoint = testBase.client.ManagedPrivateEndpoints.CreateOrUpdate(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName, new ManagedPrivateEndpoint
-        //         {
-        //             PrivateLinkResourceId = testBase.eventHubNamespaceResourceId,
-        //             GroupId = "namespace",
-        //             RequestMessage = "Please Approve Kusto"
-        //         });
-        //         VerifyManagedPrivateEndpoints(managedPrivateEndpoint, testBase.managedPrivateEndpointName, testBase.eventHubNamespaceResourceId);
-        //
-        //         var fetchedManagedPrivateEndpoint = testBase.client.ManagedPrivateEndpoints.Get(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName);
-        //         VerifyManagedPrivateEndpoints(fetchedManagedPrivateEndpoint, testBase.managedPrivateEndpointName, testBase.eventHubResourceId);
-        //
-        //         //delete managed private endpoint
-        //         testBase.client.ManagedPrivateEndpoints.Delete(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName);
-        //         
-        //         //delete cluster
-        //         testBase.client.Clusters.Delete(testBase.rgName, testBase.clusterName);
-        //     }
-        // }
+        [Fact]
+        public void KustoManagedPrivateEndpointsTests()
+        {
+            using (MockContext context = MockContext.Start(GetType()))
+            {
+                var testBase = new KustoTestBase(context);
+
+                // create cluster
+                testBase.client.Clusters.CreateOrUpdate(testBase.rgName, testBase.clusterName, testBase.cluster);
+
+                // create private endpoint connection
+                var managedPrivateEndpoint = testBase.client.ManagedPrivateEndpoints.CreateOrUpdate(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName, new ManagedPrivateEndpoint
+                {
+                    PrivateLinkResourceId = testBase.eventHubNamespaceResourceId,
+                    GroupId = "namespace",
+                    RequestMessage = "Please Approve Kusto"
+                });
+                VerifyManagedPrivateEndpoints(managedPrivateEndpoint, testBase.managedPrivateEndpointName, testBase.eventHubNamespaceResourceId);
+
+                var list1 = testBase.client.ManagedPrivateEndpoints.List(testBase.rgName, testBase.clusterName);
+                
+                
+                var fetchedManagedPrivateEndpoint = testBase.client.ManagedPrivateEndpoints.Get(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName);
+                VerifyManagedPrivateEndpoints(fetchedManagedPrivateEndpoint, testBase.managedPrivateEndpointName, testBase.eventHubNamespaceResourceId);
+
+                //delete managed private endpoint
+                testBase.client.ManagedPrivateEndpoints.Delete(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName);
+                
+                var list2 = testBase.client.ManagedPrivateEndpoints.List(testBase.rgName, testBase.clusterName);
+                
+                //delete cluster
+                testBase.client.Clusters.Delete(testBase.rgName, testBase.clusterName);
+            }
+        }
 
         [Fact]
         public void KustoPrivateLinkResourcesTests()
@@ -912,11 +917,11 @@ namespace Kusto.Tests.ScenarioTests
             Assert.Equal(privateEndpointStatus.ToString(), privateEndpointConnection.PrivateLinkServiceConnectionState.Status);
         }
 
-        private void VerifyManagedPrivateEndpoints(ManagedPrivateEndpoint managedPrivateEndpoint, string managedPrivateEndpointName, string eventHubResourceId) 
+        private void VerifyManagedPrivateEndpoints(ManagedPrivateEndpoint managedPrivateEndpoint, string managedPrivateEndpointName, string eventHubNamespaceResourceId) 
         {
-            Assert.Contains(managedPrivateEndpointName, managedPrivateEndpoint.Name);
+            Assert.Equal(managedPrivateEndpointName, managedPrivateEndpoint.Name);
             Assert.Equal("Please Approve Kusto", managedPrivateEndpoint.RequestMessage);
-            Assert.Equal(eventHubResourceId, managedPrivateEndpoint.PrivateLinkResourceId);
+            Assert.Equal(eventHubNamespaceResourceId, managedPrivateEndpoint.PrivateLinkResourceId);
 
         }
 
