@@ -745,18 +745,18 @@ namespace Kusto.Tests.ScenarioTests
                     GroupId = "namespace",
                     RequestMessage = "Please Approve Kusto"
                 });
-                VerifyManagedPrivateEndpoints(managedPrivateEndpoint, testBase.managedPrivateEndpointName, testBase.eventHubNamespaceResourceId);
+                VerifyManagedPrivateEndpoints(managedPrivateEndpoint, testBase.clusterName, testBase.managedPrivateEndpointName, testBase.eventHubNamespaceResourceId);
 
                 var list1 = testBase.client.ManagedPrivateEndpoints.List(testBase.rgName, testBase.clusterName);
-                
+                Assert.Single(list1);
                 
                 var fetchedManagedPrivateEndpoint = testBase.client.ManagedPrivateEndpoints.Get(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName);
-                VerifyManagedPrivateEndpoints(fetchedManagedPrivateEndpoint, testBase.managedPrivateEndpointName, testBase.eventHubNamespaceResourceId);
+                VerifyManagedPrivateEndpoints(fetchedManagedPrivateEndpoint, testBase.clusterName, testBase.managedPrivateEndpointName, testBase.eventHubNamespaceResourceId);
 
                 //delete managed private endpoint
                 testBase.client.ManagedPrivateEndpoints.Delete(testBase.rgName, testBase.clusterName, testBase.managedPrivateEndpointName);
-                
                 var list2 = testBase.client.ManagedPrivateEndpoints.List(testBase.rgName, testBase.clusterName);
+                Assert.Empty(list2);
                 
                 //delete cluster
                 testBase.client.Clusters.Delete(testBase.rgName, testBase.clusterName);
@@ -917,9 +917,9 @@ namespace Kusto.Tests.ScenarioTests
             Assert.Equal(privateEndpointStatus.ToString(), privateEndpointConnection.PrivateLinkServiceConnectionState.Status);
         }
 
-        private void VerifyManagedPrivateEndpoints(ManagedPrivateEndpoint managedPrivateEndpoint, string managedPrivateEndpointName, string eventHubNamespaceResourceId) 
+        private void VerifyManagedPrivateEndpoints(ManagedPrivateEndpoint managedPrivateEndpoint, string clusterName, string managedPrivateEndpointName, string eventHubNamespaceResourceId) 
         {
-            Assert.Equal(managedPrivateEndpointName, managedPrivateEndpoint.Name);
+            Assert.Equal(clusterName + "/" + managedPrivateEndpointName, managedPrivateEndpoint.Name);
             Assert.Equal("Please Approve Kusto", managedPrivateEndpoint.RequestMessage);
             Assert.Equal(eventHubNamespaceResourceId, managedPrivateEndpoint.PrivateLinkResourceId);
 
